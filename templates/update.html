@@ -1,0 +1,26 @@
+{% extends 'base.html' %}
+{% block title %}編集{% endblock %}
+{% block header%}
+        <a href="/logout" class="btn btn-secondary">ログアウト</a>
+{% endblock %}
+{% block content %}
+
+<div class="container mt-5">
+    <div class="row">
+        <div class="col-lg-8 mx-auto">
+            <h2 class="mb-4">ブログ記事の編集</h2>
+            <form method="POST">
+                <div class="mb-3">
+                    <label for="title" class="form-label">タイトル</label>
+                    <input type="text" class="form-control" id="title" name="title" value="{{ post.title }}">
+                </div>
+                <div class="mb-3">
+                    <label for="body" class="form-label">記事</label>
+                    <textarea class="form-control" id="body" rows="8" name="body">{{ post.body }}</textarea>
+                </div>
+                <button type="submit" class="btn btn-primary">変更</button>
+            </form>
+        </div>
+    </div>
+</div>
+{% endblock %}

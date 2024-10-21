@@ -1,0 +1,31 @@
+{% extends 'base.html' %}
+{% block title %}管理ページ{% endblock %}
+
+{% block content %}
+<section class="container my-5">
+    <div class="text-center mb-4">
+        <h2>Sosuke's Blog</h2>
+        <p>とある医学生のウェブアプリ作成日記です</p>
+        <a href="/create" class="btn btn-info">新規作成画面</a>
+    </div>
+    <div class="row row-cols-3 g-4">
+        {% for post in posts %}
+        <div class="col">
+            <div class="card">
+                {% if post.img_name %}
+                <img src="{{ url_for('static', filename='img/' + post.img_name) }}" class="card-img-top">
+                {% endif %}
+                <div class="card-body">
+                    <h5 class="card-title">{{ post.title }}</h5>
+                    <p class="card-text">{{ post.body[:50] }}...</p>
+                    <p>投稿日:{{ post.created_at }}</p>
+                    <p>作者:{{post.user.username}}</p>
+                    <a href="/{{ post.id }}/update" class="btn btn-success">編集</a>
+                    <a href="/{{ post.id }}/delete" class="btn btn-danger">削除</a>
+                </div>
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+</section>
+{% endblock %}
