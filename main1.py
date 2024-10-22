@@ -8,8 +8,6 @@ from .models import User, Post, Comment, Like
 main = Blueprint('main', __name__)
 
 
-
-
 @main.route("/<int:post_id>/readmore")
 def readmore(post_id):
     post = Post.query.get(post_id)
@@ -87,9 +85,15 @@ def create():
 def update(post_id):
     post = Post.query.get(post_id)
     if request.method == 'POST':
-        post.title = request.form.get('title')
-        post.body = request.form.get('body')
-        db.session.commit()
+        if not post:
+            flash('Post cannot be empty!',category='error')
+        elif current_user.id != post.author:
+            flash('You cannot edit someones post!',category='error')
+        else:
+            post.title = request.form.get('title')
+            post.body = request.form.get('body')
+            db.session.commit()
+            print('updated')
         return redirect('/admin')
     elif request.method == 'GET':
         return render_template('update.html', post=post,user=current_user)
@@ -108,51 +112,7 @@ def delete(post_id):
         flash('Post deleted',category='success')
     return redirect('/admin')
 
-@main.route('/signup', methods=['GET', 'POST'])
-def signup():
-    if request.method == 'POST':
-        username = request.form.get('username')
-        password = request.form.get('password')
-        hashed_pass = generate_password_hash(password)
 
-        email_exits = User.query.filter_by(username=username).first()
-        if email_exits:
-            flash('Username already exit',category='error')
-        elif len(username) < 2:
-            flash('Username is too short',category='error')
-        elif len(password) < 6:
-            flash('Password is too short',category='error')
-        else:
-            new_user = User(username=username, password=hashed_pass)
-            db.session.add(new_user)
-            db.session.commit()
-            flash('You are now registered',category='success')
-            return redirect('/login')
-
-    elif request.method == 'GET':
-        return render_template('signup.html',user=current_user)
-
-@main.route('/login', methods=['GET', 'POST'])
-def login():
-    if request.method == 'POST':
-        username = request.form.get('username')
-        password = request.form.get('password')
-        user = User.query.filter_by(username=username).first()
-        if user and check_password_hash(user.password, password=password):
-            flash('You are now logged in',category='success')
-            login_user(user,remember=True)
-            return redirect('/admin')
-        else:
-            flash('Invalid username or password',category='error')
-            return redirect('/login')
-    elif request.method == 'GET':
-        return render_template('login.html',user=current_user)
-
-@main.route('/logout')
-@login_required
-def logout():
-    logout_user()
-    return redirect('/login')
 
 @main.route('/delete-comment/<comment_id>')
 @login_required
