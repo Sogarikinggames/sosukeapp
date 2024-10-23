@@ -15,5 +15,5 @@ class Config:
     MAIL_USE_TLS = True
     MAIL_USE_SSL = False
     MAIL_USERNAME = 'sogari812@gmail.com'
-    MAIL_PASSWORD = 'pjov vuzh ozqa usel'
+    MAIL_PASSWORD = os.getenv('GMAIL_PASSWORD')
 
