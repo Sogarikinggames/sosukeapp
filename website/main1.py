@@ -1,11 +1,27 @@
 from flask import Blueprint, render_template, request, redirect, flash,url_for
-from flask_login import login_required, login_user, logout_user, current_user
-from werkzeug.security import generate_password_hash, check_password_hash
+from flask_login import login_required, current_user
 import os
-from . import db
-from .models import User, Post, Comment, Like
+from . import db,mail
+from .models import Post, Comment, Like, ContactForm
+from flask_mail import Message
 
 main = Blueprint('main', __name__)
+
+@main.route('/contact', methods=['GET', 'POST'])
+def contact():
+    form = ContactForm()
+    if form.validate_on_submit():
+        msg = Message('Contact Form Message',
+                      sender=form.email.data,
+                      recipients=['sogari812@gmail.com'])  # 固定送信先
+        msg.body = f"""
+        From: {form.name.data} <{form.email.data}>
+        Message: {form.message.data}
+        """
+        mail.send(msg)
+        flash('Your message has been sent!', 'success')
+        return redirect('/contact')
+    return render_template('contact.html', form=form,user=current_user)
 
 
 @main.route("/<int:post_id>/readmore")
@@ -22,10 +38,6 @@ def home():
 def aboutme():
     return render_template('aboutme.html',user=current_user)
 
-@main.route('/contact')
-def contact():
-    return render_template('contact.html',user=current_user)
-
 @main.route('/admin')
 @login_required
 def admin():
@@ -38,7 +50,6 @@ def index():
     return render_template('index.html', posts=posts,user=current_user)
 
 @main.route('/create-comment/<post_id>',methods=['POST'])
-@login_required
 def create_comment(post_id):
     text = request.form.get('text')
 
@@ -46,14 +57,20 @@ def create_comment(post_id):
         flash('Comment cannot be empty!',category='error')
     else:
         post = Post.query.get(post_id)
-        if post:
-            comment = Comment(text=text,author=current_user.id,post_id=post_id)
-            db.session.add(comment)
-            db.session.commit()
+        if current_user.is_authenticated:
+            if post:
+                print('comment created')
+                comment = Comment(text=text, author=current_user.id, post_id=post_id)
+                db.session.add(comment)
+                db.session.commit()
+            else:
+                flash('Post does not exist', category='error')
+            return redirect(f'/{post_id}/readmore')
         else:
-            flash('Post does not exist',category='error')
+            flash('You have to login')
+            return redirect('/login')
 
-    return redirect(f'/{post_id}/readmore')
+
 
 
 @main.route('/create', methods=['GET', 'POST'])

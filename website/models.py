@@ -2,6 +2,11 @@ from . import db
 from flask_login import UserMixin
 from datetime import datetime
 import pytz
+from flask_wtf import FlaskForm
+from wtforms import StringField, TextAreaField, SubmitField
+from wtforms.validators import DataRequired, Email
+
+
 
 class Post(db.Model):
     id = db.Column(db.Integer, primary_key=True)
@@ -36,4 +41,10 @@ class Like(db.Model):
     created_at = db.Column(db.DateTime, default=datetime.now)
     author = db.Column(db.Integer, db.ForeignKey('user.id', ondelete='CASCADE'), nullable=True)
     post_id = db.Column(db.Integer, db.ForeignKey('post.id', ondelete='CASCADE'), nullable=True)
+
+class ContactForm(FlaskForm):
+    name = StringField('Name', validators=[DataRequired()])
+    email = StringField('Email', validators=[DataRequired(), Email()])
+    message = TextAreaField('Message', validators=[DataRequired()])
+    submit = SubmitField('Send')
 

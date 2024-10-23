@@ -20,8 +20,10 @@
                     <p class="card-text">{{ post.body[:50] }}...</p>
                     <p>投稿日:{{ post.created_at }}</p>
                     <p>作者:{{post.user.username}}</p>
+                    {% if user.id == post.author or user.id == 1 %}
                     <a href="/{{ post.id }}/update" class="btn btn-success">編集</a>
                     <a href="/{{ post.id }}/delete" class="btn btn-danger">削除</a>
+                    {% endif %}
                     <a href="/{{ post.id }}/readmore" class="btn btn-primary">詳しく読む</a>
                 </div>
             </div>

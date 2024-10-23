@@ -40,7 +40,7 @@ def login():
         if user and check_password_hash(user.password, password=password):
             flash('You are now logged in',category='success')
             login_user(user,remember=True)
-            return redirect('/admin')
+            return redirect('/index')
         else:
             flash('Invalid username or password',category='error')
             return redirect('/login')
@@ -48,7 +48,6 @@ def login():
         return render_template('login.html',user=current_user)
 
 @auth.route('/logout')
-@login_required
 def logout():
     logout_user()
     return redirect('/login')
