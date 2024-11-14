@@ -1,10 +1,18 @@
 {% extends 'base.html' %}
-{% block title %}Sosuke Home{% endblock %}
+{% block title %}Home{% endblock %}
 {% block content %}
-<section class="container my-5">
-    <div class="text-center mb-4">
-        <h2>そうすけのウェブアプリ</h2>
-        <p>ようこそ</p>
+<script src="https://cdn.jsdelivr.net/npm/typed.js@2.0.12"></script>
+<section>
+    <div>
+        <h2 class="home_header">ようこそ。医学のための<span class="auto-input"></span></h2>
     </div>
 </section>
+<script>
+      let typed = new Typed(".auto-input", {
+        strings: ["プログラミングへ", "Pythonへ", "データ分析へ","機械学習へ","深層学習へ","プログラミングへ"],
+        typeSpeed: 100,
+        backSpeed: 100,
+        loop: false,
+      });
+</script>
 {% endblock %}

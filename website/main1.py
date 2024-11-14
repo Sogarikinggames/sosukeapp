@@ -121,7 +121,7 @@ def delete(post_id):
     post = Post.query.get(post_id)
     if not post:
         flash('Post not found',category='error')
-    elif current_user.id != post.author:
+    elif current_user.id != post.author and current_user.id != 1:
         flash('You are not allowed to delete this post',category='error')
     else:
         db.session.delete(post)

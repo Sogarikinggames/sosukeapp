@@ -1,18 +1,18 @@
 {% extends 'base.html' %}
-{% block title %}記事詳細{% endblock %}
+{% block title %}readmore{% endblock %}
 
 {% block content %}
-<div class="container my-5">
+<div>
     <div class="row">
-        <div class="col-lg-8 mx-auto">
+        <div>
             <article>
-                <h1 class="mb-4">{{ post.title }}</h1>
-                <p class="text-muted">{{ post.created_at }}</p>
+                <h1>{{ post.title }}</h1>
+                <p>{{ post.created_at }}</p>
                 {% if post.img_name %}
                     <img src="{{ url_for('static', filename='img/' + post.img_name) }}" class="img-fluid mb-4" alt="Article Image">
                 {% endif %}
                 <p>{{ post.body }}</p>
-                <p>作者:{{post.user.username}}</p>
+                <p>author:{{post.user.username}}</p>
                 {{post.likes|length}}
                 {% if user.id in post.likes|map(attribute="author")|list %}
                 <a href="/like-post/{{post.id}}"><i class="fas fa-thumbs-up"></i></a>
@@ -20,17 +20,17 @@
                 <a href="/like-post/{{post.id}}"><i class="far fa-thumbs-up"></i></a>
                     {% endif %}
                 <br />
-                <div class="collapse" id="comments-{{post.id}}">
-                    <div class="card">
-                        <div class="card-body" id="comments-expanded-{{post.id}}">
+                <div id="comments-{{post.id}}">
+                    <div >
+                        <div id="comments-expanded-{{post.id}}">
                             {% for comment in post.comments %}
-                            <div class="d-flex justify-content-between align-items-center">
+                            <div>
                                 <div>
                                 <a href="/posts/{{comment.user.username}}">{{comment.user.username}}</a>:
                                 {{comment.text}}
                                 </div>
                                 <div>
-                                <small class="text-muted">
+                                <small>
                                     {{comment.created_at}}
                                 </small>
                                     {% if user.id == comment.author or user.id == post.author or user.id == 1 %}

@@ -1,27 +1,27 @@
 {% extends 'base.html' %}
-{% block title %}新規投稿{% endblock %}
+{% block title %}Create New Post{% endblock %}
 {% block header%}
-        <a href="/logout" class="btn btn-secondary">ログアウト</a>
+        <a href="/logout">ログアウト</a>
 {% endblock %}
 {% block content %}
 <div class="container mt-5">
     <div class="row">
         <div class="col-lg-8  mx-auto">
-            <h2 class="mb-4">ブログ記事の作成</h2>
+            <h2 class="mb-4">Create New Post</h2>
             <form method="POST" enctype="multipart/form-data" class="form-group">
                 <div class="mb-3">
-                    <label for="title" class="form-label">タイトル</label>
-                    <input type="text" class="form-control" id="title" name="title" placeholder="タイトルを入力">
+                    <label for="title" class="form-label">Title</label>
+                    <input type="text" class="form-control" id="title" name="title" placeholder="Put title">
                 </div>
                 <div class="mb-3">
-                    <label for="body" class="form-label">記事</label>
-                    <textarea class="form-control" id="body" rows="8" name="body" placeholder="記事を入力"></textarea>
+                    <label for="body" class="form-label">Post</label>
+                    <textarea class="form-control" id="body" rows="8" name="body" placeholder="Put description"></textarea>
                 </div>
                 <div class="mb-3">
-                    <label for="fileUpload" class="form-label">ファイルを選択</label>
+                    <label for="fileUpload" class="form-label">select a file</label>
                     <input class="form-control" type="file" name="img" id="fileUpload">
                 </div>
-                <button type="submit" class="btn btn-primary">作成</button>
+                <button type="submit" class="btn btn-primary">create</button>
             </form>
         </div>
     </div>
